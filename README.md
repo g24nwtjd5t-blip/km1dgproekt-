@@ -1,0 +1,2 @@
+# km1dgproekt-
+fortune

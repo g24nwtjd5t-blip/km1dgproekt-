@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Калькулятор пени за задержку зарплаты в РК | Еңбекақы Инфо</title>
+  
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              200: '#bae6fd',
+              500: '#0ea5e9',
+              600: '#0284c7', // Brand Blue (#0284c7)
+              700: '#0369a1',
+              900: '#0c4a6e',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen selection:bg-brand-500 selection:text-white">
+
+  <!-- ==================== HEADER ==================== -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-slate-200 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <!-- Logo -->
+        <div class="flex items-center gap-2.5 cursor-pointer" onclick="switchTab('main')">
+          <div class="p-2 bg-brand-600 text-white rounded-xl shadow-md shadow-brand-600/20">
+            <i data-lucide="scale" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <span class="text-xl font-bold text-slate-900 tracking-tight">Еңбекақы <span class="text-brand-600">Инфо</span></span>
+            <span class="block text-[10px] text-slate-500 font-semibold uppercase tracking-wider">Правовая защита РК</span>
+          </div>
+        </div>
+
+        <!-- Desktop Navigation Tabs -->
+        <nav class="hidden md:flex space-x-1 bg-slate-100 p-1.5 rounded-xl border border-slate-200/80">
+          <button onclick="switchTab('main')" id="tab-btn-main" class="tab-btn px-4 py-2 text-sm font-semibold rounded-lg transition-all duration-200 bg-brand-50 text-brand-700 shadow-sm border border-brand-200/60">
+            Главная
+          </button>
+          <button onclick="switchTab('calc')" id="tab-btn-calc" class="tab-btn px-4 py-2 text-sm font-semibold rounded-lg transition-all duration-200 text-slate-600 hover:text-slate-900">
+            Калькулятор
+          </button>
+          <button onclick="switchTab('law')" id="tab-btn-law" class="tab-btn px-4 py-2 text-sm font-semibold rounded-lg transition-all duration-200 text-slate-600 hover:text-slate-900">
+            Правовая база
+          </button>
+          <button onclick="switchTab('steps')" id="tab-btn-steps" class="tab-btn px-4 py-2 text-sm font-semibold rounded-lg transition-all duration-200 text-slate-600 hover:text-slate-900">
+            Алгоритм действий
+          </button>
+        </nav>
+
+        <!-- Mobile menu toggle -->
+        <div class="md:hidden">
+          <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="p-2.5 text-slate-600 hover:text-slate-900 focus:outline-none min-h-[44px] min-w-[44px] flex items-center justify-center">
+            <i data-lucide="menu" class="w-6 h-6"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Nav Sub-menu -->
+    <div id="mobile-menu" class="hidden md:hidden border-b border-slate-200 bg-white px-4 pt-2 pb-4 space-y-1 shadow-lg">
+      <button onclick="switchTab('main')" id="mobile-tab-btn-main" class="mobile-tab-btn block w-full text-left px-4 py-3 text-base font-semibold rounded-xl text-brand-700 bg-brand-50 border border-brand-200/60">Главная</button>
+      <button onclick="switchTab('calc')" id="mobile-tab-btn-calc" class="mobile-tab-btn block w-full text-left px-4 py-3 text-base font-medium rounded-xl text-slate-700 hover:bg-slate-50">Калькулятор</button>
+      <button onclick="switchTab('law')" id="mobile-tab-btn-law" class="mobile-tab-btn block w-full text-left px-4 py-3 text-base font-medium rounded-xl text-slate-700 hover:bg-slate-50">Правовая база</button>
+      <button onclick="switchTab('steps')" id="mobile-tab-btn-steps" class="mobile-tab-btn block w-full text-left px-4 py-3 text-base font-medium rounded-xl text-slate-700 hover:bg-slate-50">Алгоритм действий</button>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT CONTAINER -->
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+
+    <!-- ==================== SECTION 1: ГЛАВНАЯ ==================== -->
+    <section id="tab-main" class="tab-content space-y-8 sm:space-y-12">
+      <!-- Hero Block -->
+      <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-brand-900 rounded-3xl p-6 sm:p-12 text-white shadow-xl relative overflow-hidden">
+        <div class="relative z-10 max-w-3xl space-y-6">
+          
+          <!-- AI Badge -->
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-800/80 text-brand-300 text-xs font-semibold border border-brand-500/30 backdrop-blur">
+            <i data-lucide="bot" class="w-4 h-4 text-brand-400"></i>
+            <span>Проект и его алгоритмы полностью разработаны с использованием ИИ в учебных целях</span>
+          </div>
+
+          <h1 class="text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-tight">
+            Задержка зарплаты? <br><span class="text-brand-500">Рассчитайте законную пеню</span>
+          </h1>
+          <p class="text-slate-300 text-sm sm:text-lg leading-relaxed">
+            Удобный онлайн-инструмент для работников в Казахстане. Узнайте точный размер компенсации за каждый день просрочки и сформируйте официальную претензию работодателю за 1 минуту.
+          </p>
+          <div class="pt-2 flex flex-col sm:flex-row gap-3.5">
+            <button onclick="switchTab('calc')" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-brand-600 hover:bg-brand-500 text-white font-bold rounded-xl shadow-lg shadow-brand-600/30 hover:shadow-brand-500/40 transition duration-200 min-h-[44px]">
+              <i data-lucide="calculator" class="w-5 h-5"></i> Рассчитать пеню прямо сейчас
+            </button>
+            <button onclick="switchTab('law')" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold rounded-xl border border-slate-700 transition duration-200 min-h-[44px]">
+              <i data-lucide="book-open" class="w-5 h-5"></i> Нормативная база
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feature Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
+          <div class="w-12 h-12 bg-brand-50 rounded-xl flex items-center justify-center text-brand-600 mb-4">
+            <i data-lucide="gavel" class="w-6 h-6"></i>
+          </div>
+          <h3 class="text-lg font-bold text-slate-900 mb-2">Точный расчет по закону</h3>
+          <p class="text-slate-600 text-sm leading-relaxed">Учитывает 1.25-кратную базовую ставку Национального Банка РК за каждый день просрочки выплаты по п. 4 ст. 113 ТК РК.</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
+          <div class="w-12 h-12 bg-brand-50 rounded-xl flex items-center justify-center text-brand-600 mb-4">
+            <i data-lucide="file-text" class="w-6 h-6"></i>
+          </div>
+          <h3 class="text-lg font-bold text-slate-900 mb-2">Готовая претензия</h3>
+          <p class="text-slate-600 text-sm leading-relaxed">Автоматически формирует юридически грамотный текст обращения к работодателю с требованием выплаты долга и пени.</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
+          <div class="w-12 h-12 bg-brand-50 rounded-xl flex items-center justify-center text-brand-600 mb-4">
+            <i data-lucide="shield" class="w-6 h-6"></i>
+          </div>
+          <h3 class="text-lg font-bold text-slate-900 mb-2">100% Приватность</h3>
+          <p class="text-slate-600 text-sm leading-relaxed">Все расчеты проводятся исключительно внутри вашего браузера. Никакие персональные данные не передаются и не сохраняются.</p>
+        </div>
+      </div>
+
+      <!-- AI Development Notice -->
+      <div class="bg-gradient-to-r from-indigo-50 via-sky-50 to-emerald-50 rounded-2xl p-5 sm:p-6 border border-indigo-100 flex items-start gap-4 shadow-sm">
+        <div class="p-3 bg-white rounded-xl text-indigo-600 shadow-sm shrink-0 hidden sm:block">
+          <i data-lucide="sparkles" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <h4 class="text-base font-bold text-indigo-950 mb-1 flex items-center gap-2">
+            <i data-lucide="sparkles" class="w-5 h-5 text-indigo-600 sm:hidden"></i>
+            Разработано с помощью ИИ-технологий
+          </h4>
+          <p class="text-sm text-slate-700 leading-relaxed">
+            Этот сервис создан специально для помощи работникам, юристам и HR-специалистам Республики Казахстан. Алгоритм опирается на действующие нормы Трудового кодекса РК и Кодекса об административных правонарушениях РК.
+          </p>
+        </div>
+      </div>
+
+      <!-- Security Disclaimer -->
+      <div class="bg-amber-50 border border-amber-200 rounded-2xl p-5 flex items-start gap-3 text-amber-900 text-sm">
+        <i data-lucide="alert-triangle" class="w-5 h-5 text-amber-600 shrink-0 mt-0.5"></i>
+        <p class="leading-relaxed">
+          <strong>Обратите внимание:</strong> Инструмент предназначен для самостоятельного расчета и подготовки первичных документов. Информационные материалы не заменяют очную юридическую консультацию в сложных индивидуальных ситуациях.
+        </p>
+      </div>
+    </section>
+
+
+    <!-- ==================== SECTION 2: КАЛЬКУЛЯТОР ==================== -->
+    <section id="tab-calc" class="tab-content hidden space-y-6 sm:space-y-8">
+      <div class="max-w-4xl mx-auto">
+        <div class="mb-6">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">Калькулятор пени за просрочку</h2>
+          <p class="text-slate-600 text-sm mt-1">Заполните параметры задолженности для автоматического расчета пени по ст. 113 ТК РК.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8">
+          <!-- Form -->
+          <div class="lg:col-span-7 bg-white p-5 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+            <div>
+              <label for="debt-amount" class="block text-sm font-semibold text-slate-800 mb-2">Сумма задолженности (₸)</label>
+              <div class="relative">
+                <input type="number" id="debt-amount" placeholder="Например: 250000" min="0" step="1000" oninput="calculatePenalty()"
+                       class="w-full px-4 py-3.5 bg-slate-50 border border-slate-300 rounded-xl font-medium focus:ring-2 focus:ring-brand-600 focus:bg-white outline-none transition text-base">
+                <span class="absolute right-4 top-3.5 text-slate-400 font-bold text-sm">KZT</span>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label for="date-due" class="block text-sm font-semibold text-slate-800 mb-2">Дата выплаты по договору</label>
+                <input type="date" id="date-due" onchange="calculatePenalty()"
+                       class="w-full px-3 py-3 bg-slate-50 border border-slate-300 rounded-xl font-medium focus:ring-2 focus:ring-brand-600 focus:bg-white outline-none transition text-sm min-h-[44px]">
+              </div>
+              <div>
+                <label for="date-actual" class="block text-sm font-semibold text-slate-800 mb-2">Дата фактического расчета</label>
+                <input type="date" id="date-actual" onchange="calculatePenalty()"
+                       class="w-full px-3 py-3 bg-slate-50 border border-slate-300 rounded-xl font-medium focus:ring-2 focus:ring-brand-600 focus:bg-white outline-none transition text-sm min-h-[44px]">
+              </div>
+            </div>
+
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <label for="rate-nb" class="block text-sm font-semibold text-slate-800">Базовая ставка Нацбанка РК (%)</label>
+                <span class="text-[11px] font-semibold text-brand-700 bg-brand-50 px-2 py-0.5 rounded border border-brand-200/60">НБ РК: 14.25%</span>
+              </div>
+              <div class="relative">
+                <input type="number" id="rate-nb" value="14.25" step="0.25" min="0" oninput="calculatePenalty()"
+                       class="w-full px-4 py-3.5 bg-slate-50 border border-slate-300 rounded-xl font-medium focus:ring-2 focus:ring-brand-600 focus:bg-white outline-none transition text-base">
+                <span class="absolute right-4 top-3.5 text-slate-400 font-bold text-sm">%</span>
+              </div>
+              <p class="text-[11px] text-slate-500 mt-1.5">Формула использует 1.25-кратный коэффициент (14.25% × 1.25 = 17.8125% годовых)</p>
+            </div>
+          </div>
+
+          <!-- Results Panel -->
+          <div class="lg:col-span-5 flex flex-col justify-between bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white p-6 sm:p-8 rounded-2xl shadow-xl border border-slate-800 space-y-6">
+            <div>
+              <h3 class="text-lg font-bold text-slate-200 border-b border-slate-700/80 pb-3 mb-6 flex items-center justify-between">
+                <span>Итоговый результат</span>
+                <i data-lucide="receipt" class="w-5 h-5 text-brand-400"></i>
+              </h3>
+
+              <div class="space-y-5">
+                <div>
+                  <span class="text-xs text-slate-400 uppercase tracking-wider block font-semibold mb-1">Дней просрочки</span>
+                  <span id="res-days" class="text-2xl font-bold text-white">0 дней</span>
+                </div>
+
+                <div>
+                  <span class="text-xs text-slate-400 uppercase tracking-wider block font-semibold mb-1">Рассчитанная пеня</span>
+                  <span id="res-penalty" class="text-3xl sm:text-4xl font-extrabold text-emerald-400 tracking-tight block">0 ₸</span>
+                </div>
+
+                <div class="pt-3 border-t border-slate-700/80">
+                  <span class="text-xs text-slate-400 uppercase tracking-wider block font-semibold mb-1">Общая сумма к выплате</span>
+                  <span id="res-total" class="text-xl font-bold text-slate-100">0 ₸</span>
+                </div>
+              </div>
+
+              <!-- Formula & Detailed Breakdown -->
+              <div class="mt-6 space-y-3">
+                <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Детализация расчета</span>
+                
+                <div class="bg-slate-50 font-mono text-xs text-slate-800 p-3.5 rounded-xl border border-slate-200 shadow-inner overflow-x-auto break-words whitespace-pre-wrap">
+                  Пеня = (Долг × (Ставка × 1.25) / 365) × Дни / 100
+                </div>
+
+                <div id="calc-steps-breakdown" class="bg-slate-800/80 border border-slate-700 p-3.5 rounded-xl text-xs space-y-2 text-slate-300">
+                  <div class="flex justify-between border-b border-slate-700/60 pb-1.5">
+                    <span class="text-slate-400">1. Ставка × 1.25:</span>
+                    <span id="step-rate-annual" class="font-mono text-white">17.8125%</span>
+                  </div>
+                  <div class="flex justify-between border-b border-slate-700/60 pb-1.5">
+                    <span class="text-slate-400">2. Дневная ставка:</span>
+                    <span id="step-rate-daily" class="font-mono text-white">0.0488%</span>
+                  </div>
+                  <div class="flex justify-between border-b border-slate-700/60 pb-1.5">
+                    <span class="text-slate-400">3. Пеня за 1 день:</span>
+                    <span id="step-penalty-daily" class="font-mono font-semibold text-emerald-400">0 ₸</span>
+                  </div>
+                  <div class="flex justify-between pt-0.5">
+                    <span class="text-slate-400">4. Итого за N дней:</span>
+                    <span id="step-penalty-total" class="font-mono font-bold text-emerald-400">0 ₸</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Message placeholder if no delay -->
+              <div id="no-delay-msg" class="hidden mt-4 p-3 bg-slate-800/90 border border-amber-500/40 rounded-xl text-amber-300 text-xs flex items-center gap-2">
+                <i data-lucide="info" class="w-4 h-4 shrink-0 text-amber-400"></i>
+                <span>Просрочка отсутствует или дата платежа еще не наступила.</span>
+              </div>
+            </div>
+
+            <div class="pt-2">
+              <button id="btn-generate-claim" onclick="generateClaimModal()" disabled
+                      class="w-full py-3.5 px-6 bg-brand-600 hover:bg-brand-500 disabled:bg-slate-800 disabled:text-slate-600 disabled:cursor-not-allowed text-white font-bold rounded-xl transition duration-200 flex items-center justify-center gap-2 shadow-lg shadow-brand-600/20 min-h-[44px]">
+                <i data-lucide="file-check-2" class="w-5 h-5"></i> Сформировать претензию
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================== SECTION 3: ПРАВОВАЯ БАЗА ==================== -->
+    <section id="tab-law" class="tab-content hidden space-y-6 sm:space-y-10">
+      <div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">Правовая база Республики Казахстан</h2>
+        <p class="text-slate-600 text-sm mt-1">Официальные нормы Трудового кодекса и Кодекса об административных правонарушениях РК.</p>
+      </div>
+
+      <!-- ст. 113 ТК РК -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-8 shadow-sm space-y-4">
+        <div class="flex items-center gap-3 border-b border-slate-100 pb-4">
+          <div class="p-2.5 bg-brand-50 text-brand-600 rounded-xl shrink-0">
+            <i data-lucide="book-marked" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <h3 class="text-lg sm:text-xl font-bold text-slate-900">Пункт 4 статьи 113 Трудового кодекса РК</h3>
+            <span class="text-xs font-semibold text-brand-600">Порядок и сроки выплаты заработной платы</span>
+          </div>
+        </div>
+
+        <blockquote class="bg-slate-50 border-l-4 border-brand-600 p-4 text-slate-700 italic text-sm leading-relaxed rounded-r-xl">
+          «При невыплате заработной платы работодателем в полном объеме и в сроки, которые установлены трудовым, коллективным договорами, работодатель несет ответственность в соответствии с законами Республики Казахстан. Работодатель выплачивает работнику задолженность и пеню за период задержки платежа. Размер пени рассчитывается исходя из 1,25-кратной базовой ставки Национального Банка Республики Казахстан на день исполнения обязательства по выплате заработной платы и начисляется за каждый просроченный календарный день, начиная со следующего дня, когда должна быть выплачена заработная плата, и заканчивая днем выплаты.»
+        </blockquote>
+
+        <div class="pt-2 flex items-start gap-2.5 text-xs text-slate-600 bg-slate-50 p-3.5 rounded-xl border border-slate-200/80">
+          <i data-lucide="clock" class="w-4 h-4 text-brand-600 shrink-0 mt-0.5"></i>
+          <span class="leading-relaxed"><strong>Срок расчета при увольнении:</strong> Согласно п. 4 ст. 113 ТК РК, при прекращении трудового договора выплата сумм, причитающихся работнику, производится не позднее 3 (трех) рабочих дней после его прекращения.</span>
+        </div>
+      </div>
+
+      <!-- Таблица штрафов ст. 87 КоАП РК -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-8 shadow-sm space-y-6">
+        <div class="flex items-center gap-3 border-b border-slate-100 pb-4">
+          <div class="p-2.5 bg-rose-50 text-rose-600 rounded-xl shrink-0">
+            <i data-lucide="shield-alert" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <h3 class="text-lg sm:text-xl font-bold text-slate-900">Штрафы для работодателя по ст. 87 КоАП РК</h3>
+            <span class="text-xs font-semibold text-rose-600">Административная ответственность за невыплату заработной платы</span>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto rounded-xl border border-slate-200">
+          <table class="w-full text-left border-collapse min-w-[500px]">
+            <thead>
+              <tr class="border-b border-slate-200 bg-slate-50 text-slate-700 text-xs uppercase font-bold tracking-wider">
+                <th class="p-4">Категория субъекта / Должность</th>
+                <th class="p-4 text-center">Размер штрафа (МРП)</th>
+                <th class="p-4">Правовая норма</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 text-sm">
+              <tr class="hover:bg-slate-50">
+                <td class="p-4 font-semibold text-slate-800">Должностные лица</td>
+                <td class="p-4 text-center font-bold text-rose-600 whitespace-nowrap">30 МРП</td>
+                <td class="p-4 text-slate-500 whitespace-nowrap">ч. 1 ст. 87 КоАП РК</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="p-4 font-semibold text-slate-800">Субъекты малого предпринимательства / НКО</td>
+                <td class="p-4 text-center font-bold text-rose-600 whitespace-nowrap">60 МРП</td>
+                <td class="p-4 text-slate-500 whitespace-nowrap">ч. 1 ст. 87 КоАП РК</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="p-4 font-semibold text-slate-800">Субъекты среднего предпринимательства</td>
+                <td class="p-4 text-center font-bold text-rose-600 whitespace-nowrap">100 МРП</td>
+                <td class="p-4 text-slate-500 whitespace-nowrap">ч. 1 ст. 87 КоАП РК</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="p-4 font-semibold text-slate-800">Субъекты крупного предпринимательства</td>
+                <td class="p-4 text-center font-bold text-rose-600 whitespace-nowrap">150 МРП</td>
+                <td class="p-4 text-slate-500 whitespace-nowrap">ч. 1 ст. 87 КоАП РК</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="text-xs text-slate-500 bg-slate-50 p-3.5 rounded-xl border border-slate-200/80 leading-relaxed">
+          * Действия, совершенные повторно в течение года после наложения административного взыскания, влекут увеличенные штрафы (до 300 МРП по ч. 2 ст. 87 КоАП РК).
+        </p>
+      </div>
+
+      <!-- Официальные первоисточники -->
+      <div class="bg-slate-900 text-white rounded-2xl p-5 sm:p-8 shadow-md">
+        <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+          <i data-lucide="external-link" class="w-5 h-5 text-brand-400"></i> Официальная проверка (Первоисточники)
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <a href="https://adilet.zan.kz/rus/docs/K1500000414" target="_blank" rel="noopener noreferrer" 
+             class="flex items-center justify-between p-4 bg-slate-800 hover:bg-slate-700/80 rounded-xl border border-slate-700 transition min-h-[44px]">
+            <div>
+              <span class="block font-bold text-sm text-white">ИПС «Әділет»</span>
+              <span class="text-xs text-slate-400">Трудовой кодекс РК (ст. 113)</span>
+            </div>
+            <i data-lucide="arrow-up-right" class="w-5 h-5 text-slate-400"></i>
+          </a>
+
+          <a href="https://nationalbank.kz" target="_blank" rel="noopener noreferrer" 
+             class="flex items-center justify-between p-4 bg-slate-800 hover:bg-slate-700/80 rounded-xl border border-slate-700 transition min-h-[44px]">
+            <div>
+              <span class="block font-bold text-sm text-white">Национальный Банк РК</span>
+              <span class="text-xs text-slate-400">Актуальная базовая ставка</span>
+            </div>
+            <i data-lucide="arrow-up-right" class="w-5 h-5 text-slate-400"></i>
+          </a>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================== SECTION 4: АЛГОРИТМ ДЕЙСТВИЙ ==================== -->
+    <section id="tab-steps" class="tab-content hidden space-y-6 sm:space-y-8">
+      <div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">Пошаговый алгоритм защиты прав</h2>
+        <p class="text-slate-600 text-sm mt-1">Четкая последовательность действий при невыплате заработной платы в РК.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+        <!-- Step 1 -->
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="w-8 h-8 rounded-full bg-brand-100 text-brand-700 font-extrabold text-sm flex items-center justify-center">1</span>
+              <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Досудебный этап</span>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900">Письменная претензия</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">
+              Направьте работодателю официальную претензию с расчетом долга и пени по ст. 113 ТК РК. Передайте через канцелярию (с отметкой на втором экземпляре) или отправьте заказным письмом с уведомлением.
+            </p>
+          </div>
+          <div class="pt-4 border-t border-slate-100 mt-4">
+            <button onclick="switchTab('calc')" class="text-xs font-bold text-brand-600 hover:text-brand-700 flex items-center gap-1">
+              Сформировать претензию в калькуляторе <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="w-8 h-8 rounded-full bg-brand-100 text-brand-700 font-extrabold text-sm flex items-center justify-center">2</span>
+              <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Обязательный этап</span>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900">Согласительная комиссия</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">
+              Согласно ст. 159 ТК РК, индивидуальные трудовые споры рассматриваются согласительной комиссией. Подайте заявление. Комиссия обязана рассмотреть спор в течение 15 рабочих дней.
+            </p>
+          </div>
+          <div class="pt-4 border-t border-slate-100 mt-4">
+            <span class="text-xs text-slate-500 font-medium">Срок обращения — 1 год со дня нарушения</span>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="w-8 h-8 rounded-full bg-brand-100 text-brand-700 font-extrabold text-sm flex items-center justify-center">3</span>
+              <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Государственный контроль</span>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900">Инспекция труда (e-Otinish)</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">
+              Подайте жалобу в Управление государственной инспекции труда через портал e-Otinish. Государственный инспектор проведет проверку и выдаст предписание о выплате с наложением штрафа по ст. 87 КоАП РК.
+            </p>
+          </div>
+          <div class="pt-4 border-t border-slate-100 mt-4">
+            <a href="https://eotinish.kz" target="_blank" rel="noopener noreferrer" class="text-xs font-bold text-brand-600 hover:text-brand-700 flex items-center gap-1">
+              Подать обращение через e-Otinish <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="w-8 h-8 rounded-full bg-brand-100 text-brand-700 font-extrabold text-sm flex items-center justify-center">4</span>
+              <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Судебный порядок</span>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900">Обращение в суд</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">
+              В случае неисполнения решения согласительной комиссии или для принудительного взыскания через судебных исполнителей подайте иск в суд. Инспекционное предписание также является исполнительным документом.
+            </p>
+          </div>
+          <div class="pt-4 border-t border-slate-100 mt-4">
+            <span class="text-xs text-slate-500 font-medium">Рассмотрение по месту нахождения работодателя</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="bg-white border-t border-slate-200 mt-auto py-6 sm:py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+        <p class="text-center sm:text-left leading-relaxed">
+          © 2026 Еңбекақы Инфо. Данный инструмент создан исключительно для справочно-расчетных целей и не представляет собой официальную юридическую консультацию. Сайт работает без сбора и хранения персональных данных. Все расчеты выполняются в вашем браузере. Сделано с помощью ИИ в учебных целях.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- ==================== MODAL: ГЕНЕРАТОР ПРЕТЕНЗИИ ==================== -->
+  <div id="claim-modal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl border border-slate-100 overflow-hidden">
+      <!-- Modal Header -->
+      <div class="px-5 py-4 border-b border-slate-100 bg-slate-50 space-y-1">
+        <div class="flex items-center justify-between">
+          <h3 class="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
+            <i data-lucide="file-text" class="w-5 h-5 text-brand-600"></i> Претензия о выплате зарплаты и пени
+          </h3>
+          <button onclick="closeClaimModal()" class="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg min-h-[44px] min-w-[44px] flex items-center justify-center">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+        <div class="flex items-center gap-1.5 text-xs text-indigo-600 font-medium">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+          <span>Текст заявления сгенерирован с использованием ИИ</span>
+        </div>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="p-4 sm:p-6 overflow-y-auto font-mono text-xs sm:text-sm leading-relaxed text-slate-800 bg-slate-50/50 space-y-4 whitespace-pre-wrap border-b border-slate-100 break-words overflow-x-auto" id="claim-text-container">
+        <!-- Dynamic text inserted via JS -->
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="px-5 py-4 bg-white flex flex-col sm:flex-row items-center justify-between gap-3">
+        <span class="text-xs text-slate-400 text-center sm:text-left">Заполните поля в скобках перед отправкой</span>
+        <div class="flex items-center gap-3 w-full sm:w-auto">
+          <button onclick="copyClaimText()" id="btn-copy-claim" class="flex-1 sm:flex-none px-5 py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-xs flex items-center justify-center gap-2 transition min-h-[44px]">
+            <i data-lucide="copy" class="w-4 h-4"></i> Скопировать текст
+          </button>
+          <button onclick="closeClaimModal()" class="flex-1 sm:flex-none px-4 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl text-xs transition min-h-[44px]">
+            Закрыть
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==================== JAVASCRIPT ==================== -->
+  <script>
+    // Global calculation state
+    let globalCalcState = {
+      debt: 0,
+      days: 0,
+      penalty: 0,
+      total: 0,
+      rate: 14.25,
+      dateDue: '',
+      dateActual: ''
+    };
+
+    // DOMContentLoaded Initialization
+    document.addEventListener('DOMContentLoaded', () => {
+      // Initialize Lucide Icons safely
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+
+      // Auto-fill dates
+      const today = new Date();
+      const fourteenDaysAgo = new Date();
+      fourteenDaysAgo.setDate(today.getDate() - 14);
+
+      const formatDate = (date) => date.toISOString().split('T')[0];
+
+      document.getElementById('date-due').value = formatDate(fourteenDaysAgo);
+      document.getElementById('date-actual').value = formatDate(today);
+      document.getElementById('debt-amount').value = 250000;
+
+      // Initial penalty calculation
+      calculatePenalty();
+    });
+
+    // Tab Switching Logic
+    function switchTab(tabId) {
+      // Hide all tabs using Tailwind 'hidden' class
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+
+      // Reset desktop tab button styling
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('bg-brand-50', 'text-brand-700', 'shadow-sm', 'border', 'border-brand-200/60');
+        btn.classList.add('text-slate-600');
+      });
+
+      // Reset mobile tab button styling
+      document.querySelectorAll('.mobile-tab-btn').forEach(btn => {
+        btn.classList.remove('bg-brand-50', 'text-brand-700', 'border', 'border-brand-200/60');
+        btn.classList.add('text-slate-700');
+      });
+
+      // Show targeted tab
+      const targetTab = document.getElementById(`tab-${tabId}`);
+      if (targetTab) {
+        targetTab.classList.remove('hidden');
+      }
+
+      // Style active desktop button
+      const activeBtn = document.getElementById(`tab-btn-${tabId}`);
+      if (activeBtn) {
+        activeBtn.classList.add('bg-brand-50', 'text-brand-700', 'shadow-sm', 'border', 'border-brand-200/60');
+        activeBtn.classList.remove('text-slate-600');
+      }
+
+      // Style active mobile button
+      const activeMobileBtn = document.getElementById(`mobile-tab-btn-${tabId}`);
+      if (activeMobileBtn) {
+        activeMobileBtn.classList.add('bg-brand-50', 'text-brand-700', 'border', 'border-brand-200/60');
+        activeMobileBtn.classList.remove('text-slate-700');
+      }
+
+      // Close mobile menu
+      document.getElementById('mobile-menu').classList.add('hidden');
+
+      // Scroll to top
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Toggle Mobile Menu
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobile-menu');
+      menu.classList.toggle('hidden');
+    }
+
+    // Calculation Function
+    function calculatePenalty() {
+      const debtInput = parseFloat(document.getElementById('debt-amount').value) || 0;
+      const rateInput = parseFloat(document.getElementById('rate-nb').value) || 0;
+      const dateDueInput = document.getElementById('date-due').value;
+      const dateActualInput = document.getElementById('date-actual').value;
+
+      const resDays = document.getElementById('res-days');
+      const resPenalty = document.getElementById('res-penalty');
+      const resTotal = document.getElementById('res-total');
+      const btnClaim = document.getElementById('btn-generate-claim');
+      const noDelayMsg = document.getElementById('no-delay-msg');
+
+      const stepRateAnnual = document.getElementById('step-rate-annual');
+      const stepRateDaily = document.getElementById('step-rate-daily');
+      const stepPenaltyDaily = document.getElementById('step-penalty-daily');
+      const stepPenaltyTotal = document.getElementById('step-penalty-total');
+
+      if (!dateDueInput || !dateActualInput || debtInput <= 0) {
+        resDays.textContent = '0 дней';
+        resPenalty.textContent = '0 ₸';
+        resTotal.textContent = '0 ₸';
+        stepPenaltyDaily.textContent = '0 ₸';
+        stepPenaltyTotal.textContent = '0 ₸';
+        btnClaim.disabled = true;
+        noDelayMsg.classList.add('hidden');
+        return;
+      }
+
+      const due = new Date(dateDueInput);
+      const actual = new Date(dateActualInput);
+
+      // Exact millisecond calculation rounded UP with Math.ceil
+      const diffTime = actual.getTime() - due.getTime();
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+      if (diffDays <= 0) {
+        resDays.textContent = '0 дней';
+        resPenalty.textContent = '0 ₸';
+        resTotal.textContent = `${debtInput.toLocaleString('ru-RU')} ₸`;
+        stepPenaltyDaily.textContent = '0 ₸';
+        stepPenaltyTotal.textContent = '0 ₸';
+        btnClaim.disabled = true;
+        noDelayMsg.classList.remove('hidden');
+        return;
+      }
+
+      noDelayMsg.classList.add('hidden');
+
+      // Formula RK: (Сумма * (Базовая_Ставка * 1.25) / 365) * Дни / 100
+      const annualRateMultiplier = rateInput * 1.25;
+      const dailyRateMultiplier = annualRateMultiplier / 365;
+      const dailyPenalty = (debtInput * dailyRateMultiplier) / 100;
+      const calculatedPenalty = dailyPenalty * diffDays;
+      const totalAmount = debtInput + calculatedPenalty;
+
+      // Update State
+      globalCalcState = {
+        debt: debtInput,
+        days: diffDays,
+        penalty: calculatedPenalty,
+        total: totalAmount,
+        rate: rateInput,
+        dateDue: dateDueInput,
+        dateActual: dateActualInput
+      };
+
+      // UI Update Main
+      resDays.textContent = `${diffDays} ${getDaysPlural(diffDays)}`;
+      resPenalty.textContent = `${Math.round(calculatedPenalty).toLocaleString('ru-RU')} ₸`;
+      resTotal.textContent = `${Math.round(totalAmount).toLocaleString('ru-RU')} ₸`;
+
+      // UI Update Breakdown Steps
+      stepRateAnnual.textContent = `${annualRateMultiplier.toFixed(4)}%`;
+      stepRateDaily.textContent = `${dailyRateMultiplier.toFixed(4)}%`;
+      stepPenaltyDaily.textContent = `${dailyPenalty.toFixed(2)} ₸`;
+      stepPenaltyTotal.textContent = `${Math.round(calculatedPenalty).toLocaleString('ru-RU')} ₸`;
+
+      btnClaim.disabled = false;
+    }
+
+    function getDaysPlural(number) {
+      const cases = [2, 0, 1, 1, 1, 2];
+      const titles = ['день', 'дня', 'дней'];
+      return titles[(number % 100 > 4 && number % 100 < 20) ? 2 : cases[(number % 10 < 5) ? number % 10 : 5]];
+    }
+
+    // Modal Claim Generator
+    function generateClaimModal() {
+      const container = document.getElementById('claim-text-container');
+      const modal = document.getElementById('claim-modal');
+
+      const claimTemplate = 
+`Руководителю [Наименование Организации/ТОО/ИП]
+От: [Ф.И.О. Работника]
+ИИН: [ИИН Работника]
+Телефон: [Контактный телефон]
+
+ПРЕТЕНЗИЯ
+о выплате задолженности по заработной плате и начислении пени
+
+Я, [Ф.И.О. Работника], работаю в [Наименование Организации] на должности [Ваша Должность].
+
+В нарушение п. 1 ст. 113 Трудового кодекса Республики Казахстан, мне не была своевременно выплачена заработная плата за период [Указать период].
+
+Согласно трудовому договору, срок выплаты заработной платы установлен до ${globalCalcState.dateDue}.
+Фактическая дата расчета (расчета пени): ${globalCalcState.dateActual}.
+Период просрочки составляет: ${globalCalcState.days} календарных дней.
+Сумма основного долга: ${globalCalcState.debt.toLocaleString('ru-RU')} тенге.
+
+На основании п. 4 ст. 113 Трудового кодекса РК, при невыплате заработной платы работодатель обязан выплатить задолженность и пеню. Размер пени рассчитывается исходя из 1,25-кратной базовой ставки Национального Банка РК (в данный момент ${globalCalcState.rate}%) за каждый день просрочки.
+
+Расчет пени:
+Пеня = (${globalCalcState.debt} ₸ × (${globalCalcState.rate}% × 1.25) / 365) × ${globalCalcState.days} дн. = ${Math.round(globalCalcState.penalty).toLocaleString('ru-RU')} тенге.
+
+Итого общая сумма к выплате составляет: ${Math.round(globalCalcState.total).toLocaleString('ru-RU')} тенге.
+
+На основании изложенного, ПРОШУ:
+1. Выплатить задолженность по заработной плате в размере ${globalCalcState.debt.toLocaleString('ru-RU')} тенге.
+2. Выплатить пеню за задержку выплаты в размере ${Math.round(globalCalcState.penalty).toLocaleString('ru-RU')} тенге.
+
+В случае игнорирования данной претензии в течение 10 дней, я буду вынужден(а) обратиться в Управление государственной инспекции труда (с требованием привлечения к ответственности по ст. 87 КоАП РК), в Согласительную комиссию и суд.
+
+Дата: [Текущая дата]
+Подпись: ____________ / [Ф.И.О.]`;
+
+      container.textContent = claimTemplate;
+      modal.classList.remove('hidden');
+
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+    }
+
+    function closeClaimModal() {
+      document.getElementById('claim-modal').classList.add('hidden');
+    }
+
+    function copyClaimText() {
+      const text = document.getElementById('claim-text-container').textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = document.getElementById('btn-copy-claim');
+        const originalHTML = btn.innerHTML;
+        btn.innerHTML = `<i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Скопировано!`;
+        btn.classList.add('bg-emerald-900');
+        if (window.lucide) lucide.createIcons();
+
+        setTimeout(() => {
+          btn.innerHTML = originalHTML;
+          btn.classList.remove('bg-emerald-900');
+          if (window.lucide) lucide.createIcons();
+        }, 2000);
+      });
+    }
+  </script>
+</body>
+</html>
